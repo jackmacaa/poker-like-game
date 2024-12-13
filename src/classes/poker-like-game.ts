@@ -1,9 +1,14 @@
-import { GameResults } from '../types';
+import { GameResults } from '../types/index';
 import { DeckOfCards } from './deck-of-cards';
 
 export class PokerLikeGame {
   deckOfCards: DeckOfCards;
-  players: { holeCards: string[]; handRank: string; handValue: number };
+  players: {
+    name: string;
+    holeCards: string[];
+    handRank: string;
+    handValue: number;
+  };
   private computers: {
     holeCards: string[];
     handRank: string;
@@ -11,9 +16,14 @@ export class PokerLikeGame {
   };
   communityCards: string[] = [];
 
-  constructor(deckOfCards: DeckOfCards) {
+  constructor(deckOfCards: DeckOfCards, playersName: string) {
     this.deckOfCards = deckOfCards;
-    this.players = { holeCards: [], handRank: '', handValue: 0 };
+    this.players = {
+      name: playersName,
+      holeCards: [],
+      handRank: '',
+      handValue: 0,
+    };
     this.computers = { holeCards: [], handRank: '', handValue: 0 };
   }
 
@@ -23,6 +33,10 @@ export class PokerLikeGame {
 
   getCommunityCards() {
     return this.communityCards;
+  }
+
+  getPlayersName() {
+    return this.players.name;
   }
 
   dealCards() {
@@ -77,8 +91,7 @@ export class PokerLikeGame {
     this.players.handRank = this.getHandRank(this.players.holeCards);
     this.computers.handRank = this.getHandRank(this.computers.holeCards);
 
-    const pocketPair = this.isPocketPair(this.players.holeCards);
-    if (pocketPair) {
+    if (this.isPocketPair(this.players.holeCards)) {
       this.players.handValue = this.getHandsValue(this.players.handRank);
     }
 
@@ -102,7 +115,7 @@ export class PokerLikeGame {
     if (gameResults === 'DRAW') {
       return `DRAW -> ${resultsNiceFormat}}`;
     } else if (gameResults === 'PLAYER') {
-      return `PLAYER WINNER -> ${resultsNiceFormat}}`;
+      return `${this.players.name} is the WINNER -> ${resultsNiceFormat}}`;
     } else {
       return `COMPUTER WINNER -> ${resultsNiceFormat}}`;
     }
