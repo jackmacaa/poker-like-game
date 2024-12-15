@@ -1,19 +1,10 @@
-import { GameResults } from '../types/index';
+import { GameResults, HandRank, HumanPlayers, Players } from '../types/index';
 import { DeckOfCards } from './deck-of-cards';
 
 export class PokerLikeGame {
   deckOfCards: DeckOfCards;
-  players: {
-    name: string;
-    holeCards: string[];
-    handRank: string;
-    handValue: number;
-  };
-  private computers: {
-    holeCards: string[];
-    handRank: string;
-    handValue: number;
-  };
+  players: HumanPlayers;
+  private computers: Players;
   communityCards: string[] = [];
 
   constructor(deckOfCards: DeckOfCards, playersName: string) {
@@ -21,25 +12,25 @@ export class PokerLikeGame {
     this.players = {
       name: playersName,
       holeCards: [],
-      handRank: '',
+      handRank: 'High Card',
       handValue: 0,
     };
-    this.computers = { holeCards: [], handRank: '', handValue: 0 };
+    this.computers = { holeCards: [], handRank: 'High Card', handValue: 0 };
   }
 
-  getPlayersHoleCards() {
+  getPlayersHoleCards(): string[] {
     return this.players.holeCards;
   }
 
-  getCommunityCards() {
+  getCommunityCards(): string[] {
     return this.communityCards;
   }
 
-  getPlayersName() {
+  getPlayersName(): string {
     return this.players.name;
   }
 
-  dealCards() {
+  dealCards(): void {
     this.players.holeCards = this.deckOfCards.getNumberOfUniqueCards(2);
     this.computers.holeCards = this.deckOfCards.getNumberOfUniqueCards(2);
     this.communityCards = this.deckOfCards.getNumberOfUniqueCards(3);
@@ -52,14 +43,14 @@ export class PokerLikeGame {
     return false;
   }
 
-  private getHandRank(hand: string[]): string {
+  private getHandRank(hand: string[]): HandRank {
     for (let i = 0; i < hand.length; i++) {
       const foundPair = this.communityCards.find((card) => {
         return hand[i][0] === card[0];
       });
 
       if (foundPair) {
-        return foundPair[0];
+        return foundPair[0] as HandRank;
       }
     }
     return 'High Card';
@@ -67,11 +58,11 @@ export class PokerLikeGame {
 
   /**
    *
-   * @param handValue This is the first char of the card string e.g 'Ac' is 'A' is Ace of clubs, we only care about the card and not not the suit
+   * @param card This is the first char of the card string, e.g 'Ac' is 'A', which is the Ace of clubs, we only care about the card and not not the suit
    * @returns
    */
-  private getHandsValue(handValue: string): number {
-    switch (handValue) {
+  private getHandsValue(card: HandRank): number {
+    switch (card) {
       case '2':
         return 2;
       case '3':
@@ -113,11 +104,11 @@ export class PokerLikeGame {
     const resultsNiceFormat = `The Player had [${this.players.holeCards}] which was ${this.players.handRank}'s and The Computer had [${this.computers.holeCards}] which was ${this.computers.handRank}'s`;
 
     if (gameResults === 'DRAW') {
-      return `DRAW -> ${resultsNiceFormat}}`;
+      return `DRAW -> ${resultsNiceFormat}`;
     } else if (gameResults === 'PLAYER') {
-      return `${this.players.name} is the WINNER -> ${resultsNiceFormat}}`;
+      return `${this.players.name} is the WINNER -> ${resultsNiceFormat}`;
     } else {
-      return `COMPUTER WINNER -> ${resultsNiceFormat}}`;
+      return `COMPUTER WINNER -> ${resultsNiceFormat}`;
     }
   }
 }
