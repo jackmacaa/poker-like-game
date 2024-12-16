@@ -11,11 +11,16 @@ export class PokerLikeGame {
     this.deckOfCards = deckOfCards;
     this.players = {
       name: playersName,
-      holeCards: [],
-      handRank: 'High Card',
+      holeCards: this.deckOfCards.getNumberOfUniqueCards(2),
+      handRank: 'No Pair',
       handValue: 0,
     };
-    this.computers = { holeCards: [], handRank: 'High Card', handValue: 0 };
+    this.computers = {
+      holeCards: this.deckOfCards.getNumberOfUniqueCards(2),
+      handRank: 'No Pair',
+      handValue: 0,
+    };
+    this.communityCards = this.deckOfCards.getNumberOfUniqueCards(3);
   }
 
   getPlayersHoleCards(): string[] {
@@ -28,12 +33,6 @@ export class PokerLikeGame {
 
   getPlayersName(): string {
     return this.players.name;
-  }
-
-  dealCards(): void {
-    this.players.holeCards = this.deckOfCards.getNumberOfUniqueCards(2);
-    this.computers.holeCards = this.deckOfCards.getNumberOfUniqueCards(2);
-    this.communityCards = this.deckOfCards.getNumberOfUniqueCards(3);
   }
 
   private isPocketPair(hand: string[]): boolean {
@@ -53,7 +52,7 @@ export class PokerLikeGame {
         return foundPair[0] as HandRank;
       }
     }
-    return 'High Card';
+    return 'No Pair';
   }
 
   /**
@@ -72,22 +71,29 @@ export class PokerLikeGame {
       case '5':
         return 5;
       case 'A':
-        return 13;
+        return 14;
       default: // High Card
         return 0;
     }
   }
 
-  getGameResults(): GameResults {
+  private setHandRank() {
     this.players.handRank = this.getHandRank(this.players.holeCards);
     this.computers.handRank = this.getHandRank(this.computers.holeCards);
+  }
 
+  private setHandValue() {
     if (this.isPocketPair(this.players.holeCards)) {
       this.players.handValue = this.getHandsValue(this.players.handRank);
     }
 
     this.players.handValue = this.getHandsValue(this.players.handRank);
     this.computers.handValue = this.getHandsValue(this.computers.handRank);
+  }
+
+  getGameResults(): GameResults {
+    this.setHandRank();
+    this.setHandValue();
 
     if (this.players.handValue === this.computers.handValue) {
       return 'DRAW';

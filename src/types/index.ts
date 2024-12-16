@@ -10,4 +10,4 @@ export interface HumanPlayers extends Players {
   name: string;
 }
 
-export type HandRank = 'A' | '2' | '3' | '4' | '5' | 'High Card';
+export type HandRank = 'A' | '2' | '3' | '4' | '5' | 'No Pair';
