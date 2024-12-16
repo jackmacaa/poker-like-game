@@ -1,11 +1,17 @@
-import { GameResults, HandRank, HumanPlayers, Players } from '../types/index';
+import {
+  Card,
+  GameResults,
+  HandRank,
+  HumanPlayers,
+  Players,
+} from '../types/index';
 import { DeckOfCards } from './deck-of-cards';
 
 export class PokerLikeGame {
   deckOfCards: DeckOfCards;
   players: HumanPlayers;
   private computers: Players;
-  communityCards: string[] = [];
+  communityCards: Card[] = [];
 
   constructor(deckOfCards: DeckOfCards, playersName: string) {
     this.deckOfCards = deckOfCards;
@@ -23,11 +29,11 @@ export class PokerLikeGame {
     this.communityCards = this.deckOfCards.getNumberOfUniqueCards(3);
   }
 
-  getPlayersHoleCards(): string[] {
+  getPlayersHoleCards(): Card[] {
     return this.players.holeCards;
   }
 
-  getCommunityCards(): string[] {
+  getCommunityCards(): Card[] {
     return this.communityCards;
   }
 
@@ -42,7 +48,7 @@ export class PokerLikeGame {
     return false;
   }
 
-  private getHandRank(hand: string[]): HandRank {
+  private getHandRank(hand: Card[]): HandRank {
     for (let i = 0; i < hand.length; i++) {
       const foundPair = this.communityCards.find((card) => {
         return hand[i][0] === card[0];

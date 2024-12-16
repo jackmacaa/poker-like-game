@@ -1,26 +1,28 @@
+import { Card } from '../types';
+
 export class DeckOfCards {
   nameOfCardGame: string;
-  private readonly cards: string[] = [
-    'Ad',
-    '2d',
-    '3d',
-    '4d',
-    '5d',
-    'Ac',
-    '2c',
-    '3c',
-    '4c',
-    '5c',
-    'Ah',
-    '2h',
-    '3h',
-    '4h',
-    '5h',
-    'As',
-    '2s',
-    '3s',
-    '4s',
-    '5s',
+  private readonly cards: Card[] = [
+    ['A', 'D'],
+    [2, 'D'],
+    [3, 'D'],
+    [4, 'D'],
+    [5, 'D'],
+    ['A', 'C'],
+    [2, 'C'],
+    [3, 'C'],
+    [4, 'C'],
+    [5, 'C'],
+    ['A', 'H'],
+    [2, 'H'],
+    [3, 'H'],
+    [4, 'H'],
+    [5, 'H'],
+    ['A', 'S'],
+    [2, 'S'],
+    [3, 'S'],
+    [4, 'S'],
+    [5, 'S'],
   ];
 
   constructor(nameOfGame?: string) {
@@ -40,8 +42,8 @@ export class DeckOfCards {
     return `Amount of Cards left: ${this.cards.length}`;
   }
 
-  getNumberOfUniqueCards(numOfUniqueCards: number): string[] {
-    const uniqueCards: string[] = [];
+  getNumberOfUniqueCards(numOfUniqueCards: number): Card[] {
+    const uniqueCards: Card[] = [];
 
     while (numOfUniqueCards != uniqueCards.length) {
       uniqueCards.push(this.getTopCard());
@@ -50,13 +52,13 @@ export class DeckOfCards {
     return uniqueCards;
   }
 
-  private getTopCard(): string {
+  private getTopCard(): Card {
     const topCard = this.cards.pop();
     if (topCard) {
       return topCard;
     }
 
-    return 'No cards left';
+    throw Error('No Cards left in Deck');
   }
 
   private shuffleCards(): void {

@@ -11,3 +11,9 @@ export interface HumanPlayers extends Players {
 }
 
 export type HandRank = 'A' | '2' | '3' | '4' | '5' | 'No Pair';
+
+type Suit = 'D' | 'C' | 'H' | 'S';
+
+type Value = number | 'A';
+
+export type Card = [Value, Suit];
